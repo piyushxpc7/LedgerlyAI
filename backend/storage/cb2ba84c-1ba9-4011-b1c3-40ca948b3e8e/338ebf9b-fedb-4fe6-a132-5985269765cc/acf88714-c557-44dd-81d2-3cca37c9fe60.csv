@@ -1,0 +1,6 @@
+txn_date,description,amount,reference,type
+2024-04-01,Opening Balance,50000.00,,OPENING
+2024-04-05,Payment to Vendor A,12500.00,REF001,DEBIT
+2024-04-10,Received from Customer X,25000.00,INV-101,CREDIT
+2024-04-15,Utility Bill Payment,1500.00,BILL-002,DEBIT
+2024-04-20,Bank Charges,150.00,,DEBIT

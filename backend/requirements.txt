@@ -1,0 +1,45 @@
+# Core
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+alembic==1.13.1
+pgvector==0.2.4
+
+# Async Tasks
+celery[redis]==5.3.6
+redis==5.0.1
+
+# LangGraph & LLM
+langgraph==0.0.43
+langchain==0.1.4
+langchain-mistralai==0.0.3
+langchain-anthropic==0.1.1
+
+# Document Processing
+pypdf==3.17.4
+openpyxl==3.1.2
+pandas==2.1.4
+
+# PDF Generation
+markdown==3.5.1
+weasyprint==60.2
+
+# Embeddings
+sentence-transformers==2.2.2
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+httpx==0.26.0
+
+# Utils
+python-dotenv==1.0.0
+structlog==24.1.0
