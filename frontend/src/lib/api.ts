@@ -1,4 +1,12 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+/** Base URL for the API. Must be set via NEXT_PUBLIC_API_URL in production (no localhost). */
+export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? '').replace(/\/+$/, '');
+
+const API_URL_REQUIRED_MSG = 'NEXT_PUBLIC_API_URL is not set. Configure the API base URL for this environment.';
+
+function requireApiUrl(): string {
+    if (!API_URL) throw new ApiError(0, API_URL_REQUIRED_MSG);
+    return API_URL;
+}
 
 interface FetchOptions extends RequestInit {
     token?: string;
@@ -15,6 +23,7 @@ async function fetchApi<T>(
     endpoint: string,
     options: FetchOptions = {}
 ): Promise<T> {
+    if (!API_URL) throw new ApiError(0, API_URL_REQUIRED_MSG);
     const { token, ...fetchOptions } = options;
 
     const headers: Record<string, string> = {
@@ -33,7 +42,15 @@ async function fetchApi<T>(
 
     if (!response.ok) {
         const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
-        throw new ApiError(response.status, error.detail || 'Request failed');
+        let message = error.detail || 'Request failed';
+        if (Array.isArray(message)) {
+            message = message
+                .map((item) => item?.msg || item?.message || JSON.stringify(item))
+                .join(', ');
+        } else if (typeof message === 'object' && message !== null) {
+            message = message.message || JSON.stringify(message);
+        }
+        throw new ApiError(response.status, message);
     }
 
     // Handle empty responses
@@ -91,7 +108,7 @@ export const documentsApi = {
         formData.append('doc_type', docType);
 
         const response = await fetch(
-            `${API_URL}/clients/${clientId}/documents`,
+            `${requireApiUrl()}/clients/${clientId}/documents`,
             {
                 method: 'POST',
                 headers: {
@@ -162,14 +179,14 @@ export const reportsApi = {
         fetchApi<Report>(`/reports/${reportId}`, { token }),
 
     getMarkdown: async (token: string, reportId: string): Promise<string> => {
-        const response = await fetch(`${API_URL}/reports/${reportId}/markdown`, {
+        const response = await fetch(`${requireApiUrl()}/reports/${reportId}/markdown`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         return response.text();
     },
 
     downloadPdf: (token: string, reportId: string) =>
-        `${API_URL}/reports/${reportId}/download?token=${encodeURIComponent(token)}`,
+        `${requireApiUrl()}/reports/${reportId}/download?token=${encodeURIComponent(token)}`,
 };
 
 // Types

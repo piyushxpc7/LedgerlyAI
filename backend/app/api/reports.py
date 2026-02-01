@@ -8,6 +8,7 @@ from app.database import get_db
 from app.models.report import Report
 from app.models.client import Client
 from app.models.user import User
+from app.auth import get_current_user
 from app.auth.deps import get_current_user_optional_token
 from app.schemas import ReportResponse
 

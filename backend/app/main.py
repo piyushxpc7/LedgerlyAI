@@ -35,6 +35,12 @@ logger = structlog.get_logger()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
+    if settings.is_production():
+        try:
+            settings.validate_production()
+        except ValueError as e:
+            logger.error("Invalid production config", error=str(e))
+            raise
     logger.info("Starting Ledgerly API")
     yield
     logger.info("Shutting down Ledgerly API")
@@ -54,10 +60,10 @@ app = FastAPI(
 
 from starlette.middleware.sessions import SessionMiddleware
 
-# CORS middleware
+# CORS middleware - origins from config only (no hardcoded localhost in production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_url, "http://localhost:3000"],
+    allow_origins=settings.get_cors_origins_list(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

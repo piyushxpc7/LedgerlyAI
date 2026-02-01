@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
+import { API_URL } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -66,7 +67,9 @@ export default function LoginPage() {
                                         type="button"
                                         variant="outline"
                                         className="w-full flex gap-2 items-center justify-center bg-white dark:bg-gray-800"
-                                        onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/auth/login/google`}
+                                        onClick={() => API_URL && (window.location.href = `${API_URL}/auth/login/google`)}
+                                        disabled={!API_URL}
+                                        title={!API_URL ? 'Set NEXT_PUBLIC_API_URL to enable Google sign-in' : undefined}
                                     >
                                         <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
                                             <path

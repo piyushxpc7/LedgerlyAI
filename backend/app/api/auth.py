@@ -105,9 +105,17 @@ oauth.register(
 @router.get("/login/google")
 async def google_login(request: Request):
     """Initiate Google OAuth login."""
-    redirect_uri = f"{settings.next_public_api_url}/auth/google" if hasattr(settings, 'next_public_api_url') else "http://localhost:8000/auth/google"
-    # Handling potential mismatch in settings name or hardcoding for safety if config not updated perfectly yet
-    redirect_uri = request.url_for('google_callback')
+    if not settings.google_client_id or not settings.google_client_secret:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Google OAuth is not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.",
+        )
+    # Production: use explicit redirect URI from config. Else build absolute URL from request.
+    if settings.google_oauth_redirect_uri:
+        redirect_uri = settings.google_oauth_redirect_uri.rstrip("/")
+    else:
+        base = (settings.api_base_url or str(request.base_url)).rstrip("/")
+        redirect_uri = f"{base}/auth/google"
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 

@@ -11,8 +11,9 @@ RUN npm ci
 # Copy source
 COPY . .
 
-# Build
-ENV NEXT_PUBLIC_API_URL=http://localhost:8000
+# Build: pass API URL at build time (no localhost default; set in docker-compose or CI)
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN npm run build
 
 # Runner stage
