@@ -80,7 +80,7 @@ export const clientsApi = {
 // Documents API
 export const documentsApi = {
     list: (token: string, clientId: string) =>
-        fetchApi<Document[]>(`/documents/clients/${clientId}/documents`, { token }),
+        fetchApi<Document[]>(`/clients/${clientId}/documents`, { token }),
 
     get: (token: string, documentId: string) =>
         fetchApi<Document>(`/documents/${documentId}`, { token }),
@@ -91,7 +91,7 @@ export const documentsApi = {
         formData.append('doc_type', docType);
 
         const response = await fetch(
-            `${API_URL}/documents/clients/${clientId}/documents`,
+            `${API_URL}/clients/${clientId}/documents`,
             {
                 method: 'POST',
                 headers: {

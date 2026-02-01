@@ -33,3 +33,23 @@ INFO:     127.0.0.1:52029 - "GET /documents/clients/338ebf9b-fedb-4fe6-a132-5985
 INFO:     127.0.0.1:52025 - "GET /clients/338ebf9b-fedb-4fe6-a132-5985269765cc HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:52019 - "GET /runs/clients/338ebf9b-fedb-4fe6-a132-5985269765cc/runs HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:52026 - "GET /issues/clients/338ebf9b-fedb-4fe6-a132-5985269765cc/issues HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53764 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53793 - "GET /auth/login/google HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53793 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53798 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53799 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53825 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53825 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53825 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53825 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53853 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53854 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53867 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53868 - "OPTIONS /clients HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53876 - "GET /auth/login/google HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53878 - "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53878 - "GET /apple-touch-icon.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53878 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53976 - "POST /auth/login HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:53984 - "POST /auth/register HTTP/1.1" 201 Created
+INFO:     127.0.0.1:53997 - "POST /clients HTTP/1.1" 201 Created

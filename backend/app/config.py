@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 60 * 24 * 7  # 7 days
     
+    # Google OAuth
+    google_client_id: str = ""
+    google_client_secret: str = ""
+    
     # LLM Configuration
     llm_provider: Literal["mistral", "anthropic"] = "mistral"
     mistral_api_key: str = ""

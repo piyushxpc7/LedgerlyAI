@@ -236,6 +236,12 @@ def persist_records(state: IngestionState) -> IngestionState:
             state["status"] = "failed"
             return state
         
+        # Idempotency: Clear existing records for this document
+        db.query(DocChunk).filter(DocChunk.document_id == document_id).delete()
+        db.query(Transaction).filter(Transaction.document_id == document_id).delete()
+        db.query(GSTSummary).filter(GSTSummary.document_id == document_id).delete()
+        db.flush()
+        
         # Update document type
         doc_type = state.get("document_type", "other")
         document.type = DocumentType(doc_type)

@@ -1,0 +1,7 @@
+Date,Description,Withdrawal,Deposit,Balance
+01-04-2023,Opening Balance,,,50000.00
+05-04-2023,UPI/12345/Vendor Payment,12500.00,,37500.00
+10-04-2023,NEFT/SALARY/March,25000.00,,12500.00
+15-04-2023,IMPS/Client Payment,,45000.00,57500.00
+20-04-2023,ATM Withdrawal,5000.00,,52500.00
+25-04-2023,UPI/67890/Office Rent,15000.00,,37500.00

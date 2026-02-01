@@ -52,6 +52,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+from starlette.middleware.sessions import SessionMiddleware
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -60,6 +62,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Session middleware (required for OAuth)
+app.add_middleware(SessionMiddleware, secret_key=settings.jwt_secret)
 
 
 @app.middleware("http")

@@ -83,3 +83,84 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
     Get the current authenticated user's information.
     """
     return current_user
+
+
+# --- Google OAuth ---
+from authlib.integrations.starlette_client import OAuth
+from fastapi import Request
+from starlette.responses import RedirectResponse
+from app.config import get_settings
+
+settings = get_settings()
+oauth = OAuth()
+
+oauth.register(
+    name='google',
+    client_id=settings.google_client_id,
+    client_secret=settings.google_client_secret,
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'}
+)
+
+@router.get("/login/google")
+async def google_login(request: Request):
+    """Initiate Google OAuth login."""
+    redirect_uri = f"{settings.next_public_api_url}/auth/google" if hasattr(settings, 'next_public_api_url') else "http://localhost:8000/auth/google"
+    # Handling potential mismatch in settings name or hardcoding for safety if config not updated perfectly yet
+    redirect_uri = request.url_for('google_callback')
+    return await oauth.google.authorize_redirect(request, redirect_uri)
+
+
+@router.get("/google", name="google_callback")
+async def google_callback(request: Request, db: Session = Depends(get_db)):
+    """Handle Google OAuth callback."""
+    try:
+        token = await oauth.google.authorize_access_token(request)
+    except Exception as e:
+        # If token exchange fails
+        return RedirectResponse(f"{settings.frontend_url}/login?error=auth_failed")
+
+    user_info = token.get('userinfo')
+    if not user_info:
+        user_info = await oauth.google.userinfo(token=token)
+        
+    email = user_info.get('email')
+    if not email:
+        return RedirectResponse(f"{settings.frontend_url}/login?error=no_email")
+
+    # Find or create user
+    user = db.query(User).filter(User.email == email).first()
+    
+    if not user:
+        # Create new user and org
+        # Use email domain or name as org name
+        org_name = user_info.get('name', 'My Organization') + "'s Org"
+        
+        org = Org(name=org_name)
+        db.add(org)
+        db.flush()
+        
+        import secrets
+        random_password = secrets.token_urlsafe(16)
+        
+        user = User(
+            org_id=org.id,
+            email=email,
+            password_hash=hash_password(random_password), # Set unusable password
+            role=UserRole.ADMIN, # First user via Google is Admin of their own org
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    
+    # Generate JWT
+    token_data = TokenData(
+        user_id=user.id,
+        org_id=user.org_id,
+        email=user.email,
+        role=user.role.value,
+    )
+    access_token = create_access_token(token_data)
+    
+    # Redirect to frontend with token
+    return RedirectResponse(f"{settings.frontend_url}/auth/callback?token={access_token}")

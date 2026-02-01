@@ -20,3 +20,9 @@ build/
 # IDE
 .vscode/
 .idea/
+
+# Database & Logs
+*.db
+*.log
+storage/
+

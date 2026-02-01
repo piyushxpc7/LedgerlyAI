@@ -154,6 +154,12 @@ class DocumentTypeUpdate(BaseModel):
     type: DocumentType
 
 
+class IngestionResponse(BaseModel):
+    message: str
+    document_id: UUID
+    task_id: str
+
+
 # ===== Transaction Schemas =====
 class TransactionResponse(BaseModel):
     id: UUID
