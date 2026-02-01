@@ -5,11 +5,11 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Install dependencies
-COPY frontend/package.json frontend/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm ci
 
 # Copy source
-COPY frontend/ .
+COPY . .
 
 # Build
 ENV NEXT_PUBLIC_API_URL=http://localhost:8000

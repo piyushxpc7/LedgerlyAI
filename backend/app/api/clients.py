@@ -167,10 +167,11 @@ async def upload_document(
     size = file.file.tell()
     file.file.seek(0)
     
-    if size > 10 * 1024 * 1024: # 10MB limit
+    max_size_bytes = settings.max_upload_size_mb * 1024 * 1024
+    if size > max_size_bytes:
          raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="File too large. Maximum size is 10MB.",
+            detail=f"File too large. Maximum size is {settings.max_upload_size_mb}MB.",
         )
     
     # Save file

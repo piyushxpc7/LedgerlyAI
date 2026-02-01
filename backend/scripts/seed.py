@@ -25,8 +25,8 @@ def seed_db():
         # Create Admin
         admin = User(
             org_id=org.id,
-            email="admin@example.com",
-            password_hash=hash_password("admin123"),
+            email="admin@demo.com",
+            password_hash=hash_password("password123"),
             role=UserRole.ADMIN
         )
         db.add(admin)
@@ -35,8 +35,8 @@ def seed_db():
         # Create Staff
         staff = User(
             org_id=org.id,
-            email="staff@example.com",
-            password_hash=hash_password("staff123"),
+            email="staff@demo.com",
+            password_hash=hash_password("password123"),
             role=UserRole.STAFF
         )
         db.add(staff)
@@ -53,8 +53,8 @@ def seed_db():
         
         db.commit()
         print("Database seeded successfully!")
-        print("Admin: admin@example.com / admin123")
-        print("Staff: staff@example.com / staff123")
+        print("Admin: admin@demo.com / password123")
+        print("Staff: staff@demo.com / password123")
         
     except Exception as e:
         print(f"Error seeding database: {e}")

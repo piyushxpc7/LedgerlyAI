@@ -169,7 +169,7 @@ export const reportsApi = {
     },
 
     downloadPdf: (token: string, reportId: string) =>
-        `${API_URL}/reports/${reportId}/download?token=${token}`,
+        `${API_URL}/reports/${reportId}/download?token=${encodeURIComponent(token)}`,
 };
 
 // Types

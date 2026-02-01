@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.env.*
+.venv/
+venv/
+storage/
+ledgerly.db
+uvicorn.log
+.pytest_cache/
+alembic/versions/__pycache__/

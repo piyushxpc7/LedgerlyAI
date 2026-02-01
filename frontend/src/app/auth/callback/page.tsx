@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { TOKEN_KEY } from '@/lib/auth';
 
-export default function AuthCallbackPage() {
+function AuthCallbackInner() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [error, setError] = useState('');
@@ -11,12 +12,8 @@ export default function AuthCallbackPage() {
     useEffect(() => {
         const token = searchParams.get('token');
         if (token) {
-            // Store token in localStorage
-            localStorage.setItem('token', token);
-            // Also set cookie if needed, but localStorage is primary for this app structure likely
+            localStorage.setItem(TOKEN_KEY, token);
             document.cookie = `token=${token}; path=/; max-age=604800; SameSite=Lax`;
-
-            // Redirect to dashboard
             router.push('/dashboard');
         } else {
             setError('Authentication failed. No token received.');
@@ -42,5 +39,22 @@ export default function AuthCallbackPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function AuthCallbackPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                        <h2 className="text-xl font-semibold text-gray-700">Completing sign in...</h2>
+                    </div>
+                </div>
+            }
+        >
+            <AuthCallbackInner />
+        </Suspense>
     );
 }

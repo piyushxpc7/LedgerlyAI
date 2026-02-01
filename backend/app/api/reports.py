@@ -8,7 +8,7 @@ from app.database import get_db
 from app.models.report import Report
 from app.models.client import Client
 from app.models.user import User
-from app.auth import get_current_user
+from app.auth.deps import get_current_user_optional_token
 from app.schemas import ReportResponse
 
 router = APIRouter()
@@ -68,7 +68,7 @@ async def get_report_markdown(
 @router.get("/{report_id}/download")
 async def download_report_pdf(
     report_id: UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_optional_token),
     db: Session = Depends(get_db),
 ):
     """
